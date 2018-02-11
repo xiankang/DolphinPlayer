@@ -1,0 +1,17 @@
+# Files
+*.o
+*.suo
+*.sln
+*.csproj
+*.apk
+*.log
+.DS_Store
+*.userprefs
+*.vscode
+*.zip
+
+# Folders
+DolphinPlayer/.vs/
+DolphinPlayer/Library/
+DolphinPlayer/obj/
+DolphinPlayer/UnityPackageManager/
