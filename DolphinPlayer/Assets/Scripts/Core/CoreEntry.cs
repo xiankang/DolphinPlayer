@@ -4,33 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Core.Asset;
 
 namespace Core
 {
     public class CoreEntry : MonoBehaviour
     {
-        public static CoreEntry Instance {
-            get
-            {
-                return Instance;
-            }
-            private set
-            {
-                Instance = value;
-            }
-        }
+        public static CoreEntry Instance = null;
 
-        public LifeCycle _LifeCycle
-        {
-            get
-            {
-                return _LifeCycle;
-            }
-            set
-            {
-                _LifeCycle = value;
-            }
-        }
+        public LifeCycle _LifeCycle = null;
 
         public bool InitFinished { get; private set; }
 
@@ -39,6 +21,7 @@ namespace Core
             //启动驱动逻辑
             InvokeRepeating("Tick", 1, 0.02f);
 
+            yield return ResourceManager.Init();
             //分批初始化管理器
             yield return _LifeCycle.Singletons.InitCoroutine(0, RefreshProgress);
 
@@ -49,11 +32,13 @@ namespace Core
 
         IEnumerator RefreshProgress(string stepName, int step, int count)
         {
+            Debug.LogFormat("CoreEntry RefreshProgress stepName {0},step {1}, count {2}", stepName, step, count);
             yield return 1;
         }
 
         void Awake()
         {
+            Debug.Log("CoreEntry Awake");
             Instance = this;
             _LifeCycle = null;
             InitFinished = false;
@@ -72,10 +57,7 @@ namespace Core
         {
             _LifeCycle = gameObject.AddComponent<LifeCycle>();
             _LifeCycle.Add(0, new UIManager());//UI
-
             StartCoroutine(InitCore());
-
-            UILoading.OpenWindow<UILoading>();
         }
 
         // Update is called once per frame

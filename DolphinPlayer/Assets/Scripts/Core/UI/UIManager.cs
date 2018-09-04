@@ -1,4 +1,5 @@
-﻿using Core.Config;
+﻿using Core.Asset;
+using Core.Config;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,6 +90,7 @@ namespace Core.UI
             //loading window
             //_uiLoadingWindow = OpenWindow("UILoading", typeof(UILoading), false, false) as UILoading;
 
+            UILoading.OpenWindow<UILoading>();
             yield return 1;
          }
 
@@ -113,11 +115,11 @@ namespace Core.UI
             if (window == null)
             {
                 GameObject wndObject = null;
-                UnityEngine.Object o = Resources.Load("Core/UI/" + uiName);
+                UnityEngine.Object o = ResourceManager.LoadPrefab($"Core/Res/UI/Prefab/{uiName}");
                 if (o == null)
                 {
-                    string path = CoreEnv._Game + "/UI/" + uiName;
-                    wndObject = GameObject.Instantiate(Resources.Load(path) as GameObject);
+                    string path = $"Game/{CoreEnv._Game}/Res/UI/Prefab/{uiName}";
+                    wndObject = GameObject.Instantiate(ResourceManager.LoadPrefab(path) as GameObject);
                 }
                 else
                 {
